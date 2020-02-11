@@ -2,7 +2,6 @@ import random
 import pytest
 
 from sortings import merge_sort
-from sortings import sort_functions
 
 @pytest.fixture()
 def random_array(k=100):
@@ -10,5 +9,4 @@ def random_array(k=100):
 
 def test_merge_sort(random_array):
     n = len(random_array)
-    for sort_function in sort_functions:
-        assert(sorted(random_array) == sort_function(random_array, n))
+    assert(sorted(random_array) == merge_sort(random_array, n))
