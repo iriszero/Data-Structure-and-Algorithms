@@ -49,7 +49,31 @@ def merge_sort(arr, n):
     return new_arr
 
 def quick_sort(arr, n):
-    pass
+    def _partition(arr, left, right):
+        i = left - 1
+        pivot = arr[right]
+
+        # keep arr[i..j-1] are all smaller than the pivot and
+        # arr[j+1..] are all larger than the pivot
+
+        for j in range(left, right):
+            if arr[j] < pivot:
+                i += 1
+                arr[i], arr[j] = arr[j], arr[i]
+        
+        arr[i+1], arr[right] = arr[right], arr[i+1]
+        return i+1
+
+    def _quick_sort(arr, left, right):
+        if left>=right:
+            return
+
+        pi = _partition(arr, left, right)
+        _quick_sort(arr, left, pi-1)
+        _quick_sort(arr, pi+1, right)
+
+    _quick_sort(arr, 0, n-1)
+    return arr
 
 def insertion_sort(arr, n):
     pass
