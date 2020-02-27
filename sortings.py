@@ -50,7 +50,11 @@ def merge_sort(arr, n):
 
 def quick_sort(arr, n):
     def _partition(arr, left, right):
-        i = left - 1
+        """
+        the indices are inclusive
+        """
+
+        i = left
         pivot = arr[right]
 
         # keep arr[i..j-1] are all smaller than the pivot and
@@ -58,19 +62,57 @@ def quick_sort(arr, n):
 
         for j in range(left, right):
             if arr[j] < pivot:
-                i += 1
                 arr[i], arr[j] = arr[j], arr[i]
+                i += 1
         
-        arr[i+1], arr[right] = arr[right], arr[i+1]
-        return i+1
+        arr[i], arr[right] = arr[right], arr[i]
+        return i
+    
+    def _select_pivot(arr, left, right):
+        def _pick_pivot(arr, left, right):
+            # the right most
+            # return right
 
+            # random
+            return random.randint(left, right)
+
+        pi = _pick_pivot(arr, left, right)
+        arr[pi], arr[right] = arr[right], arr[pi]
+        return arr[right]
+
+    def _three_way_partition(arr, left, right):
+        """
+        [left, i) <pivot
+        [i, j) =pivot
+        [j, k) not examined
+        [k, right) >pivot
+        """
+
+        pivot = _select_pivot(arr, left, right)
+        i = left
+        j = left
+        k = right 
+
+        while j <= k:
+            if arr[j] < pivot:
+                arr[i], arr[j] = arr[j], arr[i]
+                i += 1
+                j += 1
+            elif arr[j] > pivot:
+                arr[j], arr[k] = arr[k], arr[j]
+                k -= 1
+            else:
+                j+= 1
+
+        return i, k
+    
     def _quick_sort(arr, left, right):
         if left>=right:
             return
 
-        pi = _partition(arr, left, right)
-        _quick_sort(arr, left, pi-1)
-        _quick_sort(arr, pi+1, right)
+        l, r = _three_way_partition(arr, left, right)
+        _quick_sort(arr, left, l-1)
+        _quick_sort(arr, r, right)
 
     _quick_sort(arr, 0, n-1)
     return arr
